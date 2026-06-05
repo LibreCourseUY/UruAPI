@@ -5,3 +5,6 @@ from .supergas import supergas_router
 from .residencial_simple import residencial_simple_router
 from .triple_horario import triple_horario_router
 from .doble_horario import doble_horario_router
+from .peajes import peajes_router
+from .iccv import iccv_router
+from .inflacion import inflacion_router
