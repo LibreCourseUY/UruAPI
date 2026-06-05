@@ -42,3 +42,17 @@ async def get_span_element(html: str, element_class: str, default: str = "") -> 
 
 async def get_div_element(html: str, element_class: str, default: str = "") -> str:
     return await get_element_text(html, "div", element_class, default)
+
+
+def _get_all_elements_text(html: str, tag: str, element_class: str) -> list[str]:
+    soup = BeautifulSoup(html, "html.parser")
+    elements = soup.find_all(tag, class_=element_class)
+    return [extract_text(el) for el in elements]
+
+
+async def get_all_span_elements(html: str, element_class: str) -> list[str]:
+    return await run_in_thread(_get_all_elements_text, html, "span", element_class)
+
+
+async def get_all_p_elements(html: str, element_class: str) -> list[str]:
+    return await run_in_thread(_get_all_elements_text, html, "p", element_class)
