@@ -54,7 +54,7 @@ All data originates from official sources_ the Central Bank of Uruguay (BCU), th
 
 3. Run the development server:
    ```bash
-   uv run uvicorn app.main:main --reload --port 8083
+   uv run uvicorn app.main:app --reload --port 8083
    ```
 
 ### Interactive API docs
