@@ -6,4 +6,15 @@ services:
       - "8083:8083"
     volumes:
       - .:/app
+    environment:
+      - CACHE_BACKEND=redis
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
     command: uv run uvicorn app.main:app --host 0.0.0.0 --port 8083 --reload
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
