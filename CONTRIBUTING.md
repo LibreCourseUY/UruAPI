@@ -18,6 +18,10 @@ Before contributing, make sure your change also follows the broader LibreCourseU
 
 If you are new, start with one small endpoint or one small documentation improvement.
 
+It is strongly recommended to check the repository's [good first issue](https://github.com/LibreCourseUY/UruAPI/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) list before starting work.
+
+Those issues are usually the best entry point for new contributors because they are already scoped and documented.
+
 ## Commit Message Pattern
 
 This repository uses Conventional Commits.
