@@ -83,7 +83,9 @@ The API will be available at `http://localhost:8083`.
 UruAPI/
 ├── app/                     # Main application package
 │   ├── main.py              # FastAPI entry point
+│   ├── config.py            # Settings (cache backend, Redis URL, ...)
 │   ├── threading.py         # Async helpers for thread offloading
+│   ├── cache/               # Cache backends (in-memory / Redis)
 │   ├── routers/             # API route modules
 │   ├── schemas/             # Request/response schemas
 │   ├── services/            # Service layer package
@@ -93,6 +95,43 @@ UruAPI/
 ├── README.md
 └── uv.lock                  # Dependency lockfile
 ```
+
+## Caching
+
+To avoid hammering the upstream source, endpoints should cache their results. A cache service is injected into any route via the `CacheDep` dependency, which exposes
+two `async` methods:
+
+- `get_from_cache(key)` — returns the cached value, or `None` if missing/expired.
+- `add_to_cache(key, value, ttl)` — stores `value` under `key` for `ttl` seconds.
+
+A typical "check cache, otherwise fetch and store" flow looks like this:
+
+```python
+from fastapi import APIRouter
+
+from app.cache import CacheDep
+
+router = APIRouter()
+
+
+@router.get("/")
+async def get_dolar(cache_store: CacheDep):
+    # 1. Try the cache first.
+    value = await cache_store.get_from_cache("dolar")
+    if value is not None:
+        return {"dolar": value}
+
+    # 2. Cache miss: fetch the fresh value (e.g. from a service).
+    value = await fetch_dolar_value()
+
+    # 3. Store it so the next request is served from cache (ttl in seconds).
+    await cache_store.add_to_cache("dolar", value, ttl=86400)
+    return {"dolar": value}
+```
+
+> **Note:** the `ttl` is automatically capped so an entry never outlives the
+> daily data reset (00:00 UTC-3), no matter how large a value you pass.
+
 
 ## How to Contribute
 
