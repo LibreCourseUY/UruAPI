@@ -3,3 +3,14 @@ from .boleto import boleto_router
 from .dolar import dolar_router
 from .supergas import supergas_router
 from .real import real_router
+from .ur import ur_router
+from .euro import euro_router
+from .ui import ui_router
+from .tasa_politica_monetaria import tasa_politica_monetaria_router
+from .tarifa_electrica import tarifa_electrica_router
+from .ipc import ipc_router
+from .pbi import pbi_router
+from .peajes import peajes_router
+from .combustible import combustible_router
+from .indice_costo_construccion_vivienda import indice_costo_construccion_vivienda_router
+from .inflacion import inflacion_router
