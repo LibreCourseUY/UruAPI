@@ -1,4 +1,4 @@
-from .dependencies import HttpxClientDep
+from .dependencies import HttpxClientDep, httpx_client_lifespan
 from .scrapper import (
     extract_price,
     extract_text,

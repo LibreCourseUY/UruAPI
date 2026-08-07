@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from app.utils import httpx_client_lifespan
 from app.routers import (
     boleto_router,
     combustible_router,
@@ -20,7 +21,7 @@ from app.routers import (
     utils_router,
 )
 
-app = FastAPI()
+app = FastAPI(lifespan=httpx_client_lifespan)
 
 app.include_router(router=utils_router, prefix="/utils")
 app.include_router(router=dolar_router, prefix="/dolar")
