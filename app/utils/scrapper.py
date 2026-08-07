@@ -18,12 +18,27 @@ def extract_text(element: Tag | None, default: str = "") -> str:
     return element.get_text(strip=True)
 
 
+# Prices render in the Uruguayan format: "." groups thousands, "," is the
+# decimal separator ("$1.216,28"). The thousands group is matched greedily so
+# the number is not truncated at the first ".".
+GROUPED_AMOUNT = r"\d{1,3}(?:\.\d{3})+(?:,\d+)?"
+PRICE_PATTERN = rf"\$\s*({GROUPED_AMOUNT}|\d+(?:[.,]\d+)?)"
+
+
+def parse_amount(amount: str) -> float:
+    """Turn a Uruguayan-formatted amount ("1.216,28") into a float."""
+    if re.fullmatch(GROUPED_AMOUNT, amount):
+        return float(amount.replace(".", "").replace(",", "."))
+
+    return float(amount.replace(",", "."))
+
+
 def extract_price(text: str) -> float | None:
-    price_match = re.search(r"\$(\d+(?:[.,]\d+)?)", text)
+    price_match = re.search(PRICE_PATTERN, text)
     if price_match is None:
         return None
 
-    return float(price_match.group(1).replace(",", "."))
+    return parse_amount(price_match.group(1))
 
 
 def _get_element_text(html: str, tag: str, element_class: str, default: str = "") -> str:

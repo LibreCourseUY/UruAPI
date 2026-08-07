@@ -43,8 +43,8 @@ def _extract_ticket(item: Tag) -> dict:
     }
 
 
-def _extract_section_tickets(soup: BeautifulSoup, aria_label: str) -> list[dict]:
-    section = soup.find("section", attrs={"aria-label": aria_label})
+def _extract_section_tickets(soup: BeautifulSoup, row: str) -> list[dict]:
+    section = soup.find("section", attrs={"data-duy-row": row})
     if section is None:
         return []
 
@@ -68,7 +68,7 @@ def _parse_boleto_html(html: str) -> dict:
     if selected_option is None and fecha_select is not None:
         selected_option = fecha_select.find("option")
 
-    vigencia_section = soup.find("section", attrs={"aria-label": "Precios de boletos"})
+    vigencia_section = soup.find("section", attrs={"data-duy-row": "tarifas"})
     vigencia_title = extract_text(
         vigencia_section.find("h2", class_="text-lg md:text-xl font-semibold text-gray-900") if vigencia_section else None
     )
@@ -79,8 +79,8 @@ def _parse_boleto_html(html: str) -> dict:
             "detalle": vigencia_title,
         },
         "tarifas": {
-            "generales": _extract_section_tickets(soup, "Precios de boletos"),
-            "especiales": _extract_section_tickets(soup, "Tarifas especiales"),
+            "generales": _extract_section_tickets(soup, "tarifas"),
+            "especiales": _extract_section_tickets(soup, "tarifas_especiales"),
         },
     }
 
