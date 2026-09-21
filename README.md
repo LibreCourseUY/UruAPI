@@ -101,8 +101,8 @@ UruAPI/
 To avoid hammering the upstream source, endpoints should cache their results. A cache service is injected into any route via the `CacheDep` dependency, which exposes
 two `async` methods:
 
-- `get_from_cache(key)` — returns the cached value, or `None` if missing/expired.
-- `add_to_cache(key, value, ttl)` — stores `value` under `key` for `ttl` seconds.
+- `get_from_cache(key)`: returns the cached value, or `None` if missing/expired.
+- `add_to_cache(key, value, ttl)`: stores `value` under `key` for `ttl` seconds.
 
 A typical "check cache, otherwise fetch and store" flow looks like this:
 
